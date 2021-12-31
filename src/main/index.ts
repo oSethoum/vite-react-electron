@@ -49,6 +49,8 @@ async function createWindow() {
   win = new BrowserWindow({
     title: "Main window",
     webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: join(__dirname, "../preload/index.cjs"),
     },
     autoHideMenuBar: true,
