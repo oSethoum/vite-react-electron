@@ -1,7 +1,7 @@
 import os from "os";
 import { join } from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
-import { WindowAction, WindowState } from "./utils";
+import { WindowAction, WindowState } from "../common/utils";
 
 // disable warnings
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";

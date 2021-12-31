@@ -1,4 +1,4 @@
-import { WindowState } from "../utils";
+import { WindowState } from "../../../common/utils";
 import { atom } from "recoil";
 
 export const windowAtom = atom<WindowState>({

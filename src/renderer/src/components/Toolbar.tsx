@@ -9,7 +9,7 @@ import {
   VscScreenFull,
   VscScreenNormal,
 } from "react-icons/vsc";
-import { WindowAction, WindowState } from "../utils";
+import { WindowAction, WindowState } from "../../../common/utils";
 import { useWindowEvent } from "@mantine/hooks";
 import { useRecoilState } from "recoil";
 import { windowAtom } from "@/state/windowState";
