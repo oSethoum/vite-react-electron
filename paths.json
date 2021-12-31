@@ -4,6 +4,10 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/renderer/src/*"],
+      "@renderer/*": ["src/renderer/*"],
+      "@common/*": ["src/common/*"],
+      "@main/*": ["src/main/*"],
+      "@preload/*": ["src/preload/*"],
       "src/*": ["src/*"]
     }
   }

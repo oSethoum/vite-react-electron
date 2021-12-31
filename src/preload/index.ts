@@ -1,44 +1,20 @@
-import fs from 'fs'
-import path from 'path'
-import { contextBridge, ipcRenderer } from 'electron'
-import { domReady } from './utils'
-import { useLoading } from './loading'
+import { contextBridge, ipcRenderer } from "electron";
 
-const isDev = process.env.NODE_ENV === 'development'
-const { appendLoading, removeLoading } = useLoading()
+console.log("Hello world from preload");
 
-; (async () => {
-  await domReady()
-
-  appendLoading()
-})();
-
-// ---------------------------------------------------
-
-contextBridge.exposeInMainWorld('bridge', {
-  __dirname,
-  __filename,
-  fs,
-  path,
-  ipcRenderer: withPrototype(ipcRenderer),
-  removeLoading,
-})
-
-// `exposeInMainWorld` can not detect `prototype` attribute and methods, manually patch it.
-function withPrototype(obj: Record<string, any>) {
-  const protos = Object.getPrototypeOf(obj)
-
-  for (const [key, value] of Object.entries(protos)) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) continue
-
-    if (typeof value === 'function') {
-      // Some native API not work in Renderer-process, like `NodeJS.EventEmitter['on']`. Wrap a function patch it.
-      obj[key] = function (...args: any) {
-        return value.call(obj, ...args)
-      }
-    } else {
-      obj[key] = value
+contextBridge.exposeInMainWorld("api", {
+  send: (channel: string, data: any) => {
+    // whitelist channels
+    let validChannels = ["toMain"];
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel, data);
     }
-  }
-  return obj
-}
+  },
+  receive: (channel: string, func: any) => {
+    let validChannels = ["fromMain"];
+    if (validChannels.includes(channel)) {
+      // Deliberately strip event as it includes `sender`
+      ipcRenderer.once(channel, (event, ...args) => func(...args));
+    }
+  },
+});

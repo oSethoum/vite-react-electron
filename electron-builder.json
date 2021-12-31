@@ -1,5 +1,5 @@
 {
-  "appId": "308487730@qq.com",
+  "appId": "oSethoum@gmail.com",
   "asar": true,
   "directories": {
     "output": "release/${version}"
@@ -18,7 +18,8 @@
       {
         "target": "nsis",
         "arch": [
-          "x64"
+          "x64",
+          "x86"
         ]
       }
     ],

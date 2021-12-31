@@ -1,25 +1,43 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import 'antd/dist/antd.css'
-import './samples/electron-store'
-import './index.css'
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
+import { useLocalStorageValue } from "@mantine/hooks";
+import React from "react";
+import ReactDOM from "react-dom";
+import { RecoilRoot } from "recoil";
+import App from "./App";
+import ToolBar from "./components/Toolbar";
+import "./index.css";
+
+const Main = () => {
+  const [colorScheme, setColorScheme] = useLocalStorageValue<ColorScheme>({
+    key: "mantine-color-scheme",
+    defaultValue: "light",
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || colorScheme === "dark" ? "light" : "dark");
+
+  return (
+    <RecoilRoot>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider theme={{ colorScheme }} withGlobalStyles>
+          <ToolBar />
+          <App />
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </RecoilRoot>
+  );
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Main />
   </React.StrictMode>,
-  document.getElementById('root'),
-  () => {
-    window.bridge.removeLoading()
-  },
-)
-
-// -----------------------------------------------------------
-
-console.log('contextBridge ->', window.bridge)
-
-// Use ipcRenderer.on
-window.bridge.ipcRenderer.on('main-process-message', (_event, ...args) => {
-  console.log('[Receive Main-process message]:', ...args)
-})
+  document.getElementById("root"),
+);
